@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LuggageShare — Open Requests</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto;max-width:1000px;margin:24px auto;padding:0 16px}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+    th{background:#f8f8f8}
+    .closeBtn{padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+  </style>
+</head>
+<body>
+  <h1>Open Requests</h1>
+  <div>
+    <button id="refresh">Refresh</button>
+    <p>To close a request, the requester must use their request ID (shown on submission).</p>
+  </div>
+  <table id="listTable">
+    <thead><tr><th>ID</th><th>Name</th><th>From</th><th>To</th><th>Date</th><th>Mobile</th><th>Email</th><th>Info</th><th>Action</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const WEBAPP_URL = 'PASTE_YOUR_WEBAPP_URL_HERE'; // same web app url
+
+    async function loadList(){
+      const t = document.querySelector('#listTable tbody');
+      t.innerHTML = '<tr><td colspan="9">Loading...</td></tr>';
+      try {
+        const resp = await fetch(WEBAPP_URL + '?action=list');
+        const arr = await resp.json();
+        if (!Array.isArray(arr)) {
+          t.innerHTML = '<tr><td colspan="9">Error loading list</td></tr>';
+          return;
+        }
+        if (arr.length === 0) {
+          t.innerHTML = '<tr><td colspan="9">No open requests</td></tr>';
+          return;
+        }
+        t.innerHTML = '';
+        arr.forEach(r => {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td>${r.ID||''}</td>
+            <td>${r.Name||''}</td>
+            <td>${r.From||''}</td>
+            <td>${r.To||''}</td>
+            <td>${r.DatePickup||''}</td>
+            <td>${r.Mobile||''}</td>
+            <td>${r.Email||''}</td>
+            <td>${(r.AdditionalInfo||'').slice(0,80)}</td>
+            <td><button class="closeBtn" data-id="${r.ID}">Close</button></td>`;
+          t.appendChild(row);
+        });
+        document.querySelectorAll('.closeBtn').forEach(b => {
+          b.addEventListener('click', async (ev) => {
+            const id = ev.target.dataset.id;
+            const secret = prompt('Enter the request ID to confirm closing (copy/paste).');
+            if (!secret || secret !== id) {
+              alert('ID mismatch or cancelled. Only the requester who has the ID can close the request.');
+              return;
+            }
+            try {
+              const res = await fetch(WEBAPP_URL + '?action=close', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({id: id})
+              });
+              const j = await res.json();
+              if (j.status === 'ok') {
+                alert('Request closed.');
+                loadList();
+              } else {
+                alert('Error: ' + (j.message || JSON.stringify(j)));
+              }
+            } catch (err) {
+              alert('Network error: ' + err);
+            }
+          });
+        });
+      } catch (err) {
+        t.innerHTML = '<tr><td colspan="9">Network error</td></tr>';
+      }
+    }
+
+    document.getElementById('refresh').addEventListener('click', loadList);
+    loadList();
+  </script>
+</body>
+</html>
