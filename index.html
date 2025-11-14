@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LuggageShare — Add Request</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto;max-width:800px;margin:24px auto;padding:0 16px;color:#111}
+    label{display:block;margin:10px 0 4px;font-weight:600}
+    input, select, textarea{width:100%;padding:8px;border-radius:6px;border:1px solid #ddd}
+    button{margin-top:12px;padding:10px 14px;border-radius:8px;border:none;background:#111;color:#fff;cursor:pointer}
+    .note{font-size:0.9rem;color:#555;margin-top:8px}
+  </style>
+</head>
+<body>
+  <h1>LuggageShare — Add Request</h1>
+  <form id="requestForm">
+    <label for="name">Name</label>
+    <input id="name" name="name" required />
+
+    <label for="from">From</label>
+    <select id="from" name="from" required>
+      <!-- default sample list; edit as needed -->
+      <option value="">-- select city/airport --</option>
+      <option>Hamburg (HAM)</option>
+      <option>Berlin (BER)</option>
+      <option>Cairo (CAI)</option>
+      <option>Alexandria (HBE)</option>
+      <option>Munich (MUC)</option>
+    </select>
+
+    <label for="to">To</label>
+    <select id="to" name="to" required>
+      <option value="">-- select city/airport --</option>
+      <option>Cairo (CAI)</option>
+      <option>Hamburg (HAM)</option>
+      <option>Berlin (BER)</option>
+      <option>Alexandria (HBE)</option>
+      <option>Munich (MUC)</option>
+    </select>
+
+    <label for="datepickup">Pickup date</label>
+    <input id="datepickup" name="datepickup" type="date" required />
+
+    <label for="mobile">Mobile (optional)</label>
+    <input id="mobile" name="mobile" placeholder="+49..." />
+
+    <label for="email">E-mail (optional)</label>
+    <input id="email" name="email" type="email" />
+
+    <label for="additionalinfo">Additional info (optional)</label>
+    <textarea id="additionalinfo" name="additionalinfo" rows="4"></textarea>
+
+    <button type="submit">Post request</button>
+    <p class="note">After posting, you'll get an ID shown. Save it so you can close the request later.</p>
+  </form>
+
+  <script>
+    const WEBAPP_URL = 'PASTE_YOUR_WEBAPP_URL_HERE'; // <-- paste the Apps Script web app URL here
+
+    document.getElementById('requestForm').addEventListener('submit', async function(ev){
+      ev.preventDefault();
+      const data = {
+        name: document.getElementById('name').value,
+        from: document.getElementById('from').value,
+        to: document.getElementById('to').value,
+        datepickup: document.getElementById('datepickup').value,
+        mobile: document.getElementById('mobile').value,
+        email: document.getElementById('email').value,
+        additionalinfo: document.getElementById('additionalinfo').value
+      };
+      try {
+        const resp = await fetch(WEBAPP_URL + '?action=add', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+        const res = await resp.json();
+        if (res.status === 'ok') {
+          alert('Request posted! Your request ID: ' + res.id + '\nSave it to close the request later.');
+          document.getElementById('requestForm').reset();
+        } else {
+          alert('Error: ' + (res.message || JSON.stringify(res)));
+        }
+      } catch (err) {
+        alert('Network error: ' + err);
+      }
+    });
+  </script>
+</body>
+</html>
