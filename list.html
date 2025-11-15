@@ -43,15 +43,15 @@
         t.innerHTML = '';
         arr.forEach(r => {
           const row = document.createElement('tr');
-          row.innerHTML = `<td>${r.ID||''}</td>
-            <td>${r.Name||''}</td>
-            <td>${r.From||''}</td>
-            <td>${r.To||''}</td>
-            <td>${r.DatePickup||''}</td>
-            <td>${r.Mobile||''}</td>
-            <td>${r.Email||''}</td>
-            <td>${(r.AdditionalInfo||'').slice(0,80)}</td>
-            <td><button class="closeBtn" data-id="${r.ID}">Close</button></td>`;
+          row.innerHTML = `<td>${r.id||''}</td>
+          <td>${r.name||''}</td>
+          <td>${r.from_loc||''}</td>
+          <td>${r.to_loc||''}</td>
+          <td>${r.datepickup||''}</td>
+          <td>${r.mobile||''}</td>
+          <td>${r.email||''}</td>
+          <td>${(r.additionalinfo||'').slice(0,80)}</td>
+          <td><button class="closeBtn" data-id="${r.id}">Close</button></td>`;
           t.appendChild(row);
         });
         document.querySelectorAll('.closeBtn').forEach(b => {
