@@ -52,7 +52,7 @@ document.getElementById('requestForm').addEventListener('submit', async (e) => {
     additionalinfo: document.getElementById('additionalinfo').value
   };
 
-  const url = "PASTE_YOUR_REAL_CLOUDFLARE_WORKER_URL_HERE/submit";
+  const url = "https://weightshare-backend.weightshare.workers.dev/add";
 
   try {
     const res = await fetch(url, {
