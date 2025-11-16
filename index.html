@@ -4,8 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>WeightShare — Transport by Travellers</title>
-
-<!-- Simple modern styling (self-contained) -->
 <style>
   :root{
     --blue:#0ea5ff;
@@ -13,65 +11,55 @@
     --muted:#6b7280;
     --success:#16a34a;
     --bg:#f8fafc;
+    --card:#ffffff;
   }
-  html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#0b1220;background:var(--bg);}
+  html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;color:#0b1220;background:var(--bg);}
   .container{max-width:1100px;margin:0 auto;padding:20px;}
-  /* NAV */
   header{background:#fff;box-shadow:0 6px 18px rgba(12,13,19,0.06);position:sticky;top:0;z-index:60;}
   .nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;}
   .logo{font-weight:700;color:var(--blue);font-size:20px;}
   .nav-actions{display:flex;gap:14px;align-items:center}
   .btn{background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;border:none;cursor:pointer}
   .btn.ghost{background:transparent;color:var(--navy);border:1px solid #e6eef8}
-  .hero{
-    height:280px;
-    border-radius:10px;
-    margin-top:20px;
-    background-image: linear-gradient(90deg, rgba(6,11,26,0.65), rgba(6,11,26,0.25)), url('https://images.unsplash.com/photo-1501700493788-fa1a4fc9fe62?auto=format&fit=crop&w=1500&q=60');
-    background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;
-  }
-  .hero-inner{width:100%;max-width:980px;padding:28px}
-  .hero-title{font-size:28px;margin:0 0 12px;font-weight:700}
-  .search-bar{
-    background:rgba(255,255,255,0.95);
-    border-radius:12px;
-    padding:14px;
-    display:flex;gap:10px;align-items:center;box-shadow:0 6px 18px rgba(2,6,23,0.12);
-  }
-  .search-field{flex:1;display:flex;gap:8px;align-items:center}
-  .select, .input, .date {
-    background:#fff;border:1px solid #e6eef8;padding:10px 12px;border-radius:8px;min-width:140px;font-size:14px;color:#0b1220;
-  }
+  .hero{height:260px;border-radius:10px;margin-top:20px;background-image: linear-gradient(90deg, rgba(6,11,26,0.65), rgba(6,11,26,0.25)), url('https://images.unsplash.com/photo-1501700493788-fa1a4fc9fe62?auto=format&fit=crop&w=1500&q=60');background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;}
+  .hero-inner{width:100%;max-width:980px;padding:18px}
+  .hero-title{font-size:26px;margin:0 0 12px;font-weight:700}
+  .search-bar{background:rgba(255,255,255,0.98);border-radius:12px;padding:12px;display:flex;gap:8px;align-items:center;box-shadow:0 6px 18px rgba(2,6,23,0.12);}
+  .search-field{display:flex;gap:8px;align-items:center}
+  .select,.input,.date{background:#fff;border:1px solid #e6eef8;padding:10px 12px;border-radius:8px;min-width:140px;font-size:14px;color:#0b1220}
   .input{flex:1}
   .search-btn{background:var(--blue);color:#fff;border:none;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:600}
-  /* main */
   main{margin-top:22px}
   .section-title{font-size:18px;margin:8px 0 14px;color:var(--navy);font-weight:600}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-  .card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 4px 12px rgba(2,6,23,0.06)}
-  .card h4{margin:0 0 6px;font-size:16px}
-  .meta{color:var(--muted);font-size:13px;margin-bottom:8px}
-  .card .actions{display:flex;justify-content:space-between;align-items:center}
-  .close-btn{background:#fee2e2;color:#ef4444;padding:6px 8px;border-radius:8px;border:none;cursor:pointer}
-  /* modal */
+  .date-group{margin-top:8px}
+  .date-header{font-weight:700;color:#0b1220;margin:18px 0 8px}
+  .ticket{display:flex;justify-content:space-between;align-items:center;background:var(--card);padding:12px;border-radius:8px;box-shadow:0 4px 10px rgba(2,6,23,0.06);margin-bottom:8px;cursor:pointer}
+  .ticket-left{display:flex;gap:12px;align-items:center;flex:1;min-width:0}
+  .route{font-weight:700}
+  .meta{color:var(--muted);font-size:13px;margin-top:4px}
+  .whatsapp-btn{background:#25D366;color:#fff;padding:8px 10px;border-radius:8px;border:none;display:inline-flex;gap:8px;align-items:center;font-weight:600;cursor:pointer}
+  .price{font-weight:800;font-size:16px;color:#0b1220;min-width:88px;text-align:right}
+  .small-muted{color:var(--muted);font-size:13px}
+  /* modal/backdrop */
   .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.45);display:flex;align-items:center;justify-content:center;z-index:120}
-  .modal{width:100%;max-width:720px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 10px 40px rgba(2,6,23,0.3)}
+  .modal{width:100%;max-width:760px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 10px 40px rgba(2,6,23,0.3)}
   .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   .form-group{display:flex;flex-direction:column;gap:6px}
   label{font-size:13px;color:#111;font-weight:600}
-  input[type="text"], input[type="date"], input[type="tel"], input[type="email"], select, textarea{
-    padding:10px;border-radius:8px;border:1px solid #e6eef8;font-size:14px;background:#fff;outline:none;
-  }
+  input[type="text"], input[type="date"], input[type="tel"], input[type="email"], input[type="number"], select, textarea{padding:10px;border-radius:8px;border:1px solid #e6eef8;font-size:14px;background:#fff;outline:none}
   textarea{resize:vertical;min-height:80px}
   .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-  /* toast */
   .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:12px 18px;border-radius:10px;z-index:200;box-shadow:0 8px 24px rgba(2,6,23,0.18)}
-  /* responsive */
+  .success-modal .modal{max-width:520px;text-align:center}
+  .copy-btn{background:#fff;color:var(--success);border:1px solid rgba(255,255,255,0.18);padding:8px 10px;border-radius:8px;cursor:pointer}
   @media (max-width:720px){
     .form-grid{grid-template-columns:1fr}
     .search-bar{flex-direction:column;align-items:stretch}
     .search-field{flex-direction:column}
+    .price{min-width:64px;text-align:right}
   }
+  /* icons */
+  .wa-icon{width:18px;height:18px;display:inline-block}
 </style>
 </head>
 <body>
@@ -81,7 +69,6 @@
     <div class="logo">WeightShare</div>
     <div class="nav-actions">
       <button id="openAdd" class="btn">➕ Add Request</button>
-      <a class="btn ghost" href="#" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});return false">Transport</a>
     </div>
   </div>
 </header>
@@ -90,9 +77,8 @@
   <div class="hero-inner container">
     <div class="hero-title">Send or transport parcels with travellers — faster and cheaper</div>
 
-    <div class="search-bar" role="search" aria-label="Search transport requests">
-      <!-- Request type select -->
-      <div class="search-field" style="min-width:220px;max-width:260px;">
+    <form id="searchForm" class="search-bar" role="search" aria-label="Search transport requests">
+      <div class="search-field" style="min-width:200px;max-width:260px;">
         <select id="searchType" class="select" aria-label="Request type">
           <option value="">Any type</option>
           <option value="shipper">Shipper (looking to send)</option>
@@ -100,7 +86,7 @@
         </select>
       </div>
 
-      <div class="search-field">
+      <div class="search-field" style="flex:1">
         <input id="searchFrom" class="input" type="text" placeholder="Leaving from (city or airport)" aria-label="From" />
         <input id="searchTo" class="input" type="text" placeholder="Going to (city or airport)" aria-label="To" />
         <input id="searchDate" class="date" type="date" aria-label="Date" />
@@ -109,256 +95,360 @@
       <div>
         <button id="doSearch" class="search-btn">Search</button>
       </div>
-    </div>
+    </form>
   </div>
 </section>
 
 <main class="container">
   <h3 class="section-title">Open Requests</h3>
-  <div id="listArea" class="cards" aria-live="polite">
-    <!-- cards will render here -->
+  <div id="resultsRoot" aria-live="polite">
+    <!-- grouped lists will render here -->
   </div>
 </main>
 
-<!-- Modal (hidden) -->
+<!-- modal root -->
 <div id="modalRoot" style="display:none"></div>
-
-<!-- Toast container -->
+<!-- success modal root -->
+<div id="successRoot" style="display:none"></div>
+<!-- toast -->
 <div id="toastRoot" style="position:fixed;top:0;left:0;right:0;pointer-events:none"></div>
 
 <script>
-/* CONFIG: set your worker URL here */
-const WORKER_URL = 'https://weightshare-backend.weightshare.workers.dev'; // <- already set
+/* CONFIG: set your worker URL and routes */
+const WORKER_URL = 'https://weightshare-backend.weightshare.workers.dev';
+const ADD_ROUTE = '/add-request';
+const LIST_ROUTE = '/list';
+const CLOSE_ROUTE = '/close-request';
 
-/* Helper: fetch JSON with basic error handling */
-async function apiFetch(path, options = {}) {
-  try {
-    const res = await fetch(WORKER_URL + path, options);
-    const j = await res.json().catch(() => ({ status:'error', message:'Invalid JSON' }));
-    return { ok: res.ok, status: res.status, data: j };
-  } catch (err) {
-    return { ok:false, status:0, data:{ status:'error', message: String(err) } };
-  }
-}
-
-/* Render request cards */
-function renderRequests(list) {
-  const container = document.getElementById('listArea');
-  container.innerHTML = '';
-  if (!Array.isArray(list) || list.length === 0) {
-    container.innerHTML = '<div style="grid-column:1/-1;color:var(--muted)">No open requests found.</div>';
-    return;
-  }
-  list.forEach(r => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    // Extract type from additionalinfo if present
-    let typ = '';
-    let notes = r.additionalinfo || '';
-    if (typeof notes === 'string') {
-      const m = notes.match(/^Type:\\s*(shipper|traveller)\\b[:\\-\\s]*/i);
-      if (m) {
-        typ = m[1].toLowerCase();
-        notes = notes.replace(/^Type:\\s*(shipper|traveller)[:\\-\\s]*/i, '');
-      }
+/* small helpers */
+const api = {
+  async list(q = {}) {
+    // build query string
+    const params = new URLSearchParams();
+    if (q.from) params.set('from', q.from);
+    if (q.to) params.set('to', q.to);
+    if (q.date) params.set('date', q.date);
+    if (q.type) params.set('type', q.type);
+    const url = WORKER_URL + LIST_ROUTE + (params.toString() ? ('?' + params.toString()) : '');
+    try {
+      const r = await fetch(url);
+      return await r.json();
+    } catch (e) {
+      return { status: 'error', message: String(e) };
     }
-    card.innerHTML = `
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-        <div>
-          <h4>${r.name || '—'} ${typ ? '<small style="font-weight:600;color:var(--muted);font-size:13px"> • ' + typ + '</small>' : ''}</h4>
-          <div class="meta">${r.from_loc || r.from || '—'} → ${r.to_loc || r.to || '—'} • ${r.datepickup || ''}</div>
-          <div style="color:var(--muted);font-size:13px;margin-bottom:8px">${notes || ''}</div>
-          <div style="font-size:13px;color:var(--muted)"><strong>Contact:</strong> ${r.mobile || ''} ${r.email ? ' • ' + r.email : ''}</div>
-        </div>
-        <div class="actions">
-          <div style="text-align:right">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${r.createdat ? (new Date(r.createdat)).toLocaleString() : ''}</div>
-            <button class="close-btn" data-id="${r.id}">Close</button>
-          </div>
-        </div>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-
-  // attach close listeners
-  container.querySelectorAll('.close-btn').forEach(btn=>{
-    btn.addEventListener('click', async (e)=>{
-      const id = e.target.dataset.id;
-      const secret = prompt('Enter the request ID to confirm closing (copy/paste):');
-      if (!secret || secret !== id) { alert('Cancelled or ID mismatch'); return; }
-      showToast('Closing request...', {auto:1500});
-      const res = await apiFetch('?action=close', {
-        method:'POST',
-        headers:{ 'Content-Type':'application/json' },
+  },
+  async add(payload) {
+    try {
+      const r = await fetch(WORKER_URL + ADD_ROUTE, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      return await r.json();
+    } catch (e) {
+      return { status:'error', message:String(e) };
+    }
+  },
+  async close(id) {
+    try {
+      const r = await fetch(WORKER_URL + CLOSE_ROUTE, {
+        method: 'POST',
+        headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ id })
       });
-      if (res.ok && res.data && res.data.status === 'ok') {
-        showToast('Request closed', {success:true, auto:1800});
-        await loadAndRender(); // refresh
-      } else {
-        showToast('Error closing request: ' + (res.data?.message || 'unknown'), {auto:3000});
+      return await r.json();
+    } catch (e) {
+      return { status:'error', message:String(e) };
+    }
+  }
+};
+
+/* UI helpers */
+function showToast(text, {auto=2200}={}) {
+  const root = document.getElementById('toastRoot');
+  root.innerHTML = `<div class="toast">${text}</div>`;
+  if (auto>0) setTimeout(()=>root.innerHTML='', auto);
+}
+function showSuccessModal(id) {
+  const root = document.getElementById('successRoot');
+  root.style.display = 'block';
+  root.innerHTML = `
+    <div class="modal-backdrop success-modal" role="dialog" aria-modal="true">
+      <div class="modal">
+        <h3 style="margin-top:0;color:var(--success)">✔ Request created</h3>
+        <p style="margin:8px 0 14px">Your request was submitted successfully. Save this ID to close the request later.</p>
+        <div style="display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:12px">
+          <div style="background:#fff;padding:10px 14px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.04)">${id}</div>
+          <button id="copyId" class="copy-btn">Copy ID</button>
+        </div>
+        <div style="display:flex;justify-content:center;gap:8px">
+          <button id="closeSuccess" class="btn ghost">Close</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('copyId').addEventListener('click', async ()=>{
+    try {
+      await navigator.clipboard.writeText(id);
+      showToast('ID copied to clipboard', {auto:1600});
+    } catch (e) {
+      showToast('Could not copy', {auto:1600});
+    }
+  });
+  document.getElementById('closeSuccess').addEventListener('click', ()=>{
+    root.style.display = 'none';
+    root.innerHTML = '';
+  });
+}
+
+/* normalization for whatsapp */
+function cleanPhoneForWa(phone) {
+  if (!phone) return '';
+  // remove spaces, parentheses, dashes, plus signs
+  let p = phone.toString().trim();
+  p = p.replace(/\s+/g,'');
+  p = p.replace(/[^\d]/g,'');
+  // remove leading zeros (common local formats) - keep as is (wa expects country code)
+  // if number starts with single 0 and length > 6, leave as is; best to expect international format entered by user
+  return p;
+}
+
+/* group by date (datepickup) - returns { 'YYYY-MM-DD': [items] } */
+function groupByDate(items){
+  const map = {};
+  items.forEach(it=>{
+    const dp = it.datepickup ? (new Date(it.datepickup)).toISOString().slice(0,10) : 'no-date';
+    if (!map[dp]) map[dp]=[];
+    map[dp].push(it);
+  });
+  // sort keys descending (nearest first)
+  const sortedKeys = Object.keys(map).sort();
+  const ordered = {};
+  sortedKeys.forEach(k=>ordered[k]=map[k]);
+  return ordered;
+}
+
+/* render grouped list */
+function renderGrouped(list){
+  const root = document.getElementById('resultsRoot');
+  root.innerHTML = '';
+  if (!Array.isArray(list) || list.length === 0) {
+    root.innerHTML = '<div class="small-muted">No open requests found.</div>';
+    return;
+  }
+  const grouped = groupByDate(list);
+  Object.keys(grouped).forEach(dateKey=>{
+    const group = grouped[dateKey];
+    const h = document.createElement('div');
+    h.className = 'date-group';
+    const pretty = dateKey==='no-date' ? 'No date' : (new Date(dateKey)).toLocaleDateString(undefined, { weekday:'long', day:'numeric', month:'short' });
+    h.innerHTML = `<div class="date-header">${pretty}</div>`;
+    root.appendChild(h);
+    // tickets
+    group.forEach(item=>{
+      const ticket = document.createElement('div');
+      ticket.className = 'ticket';
+      // determine type from additionalinfo if saved as "Type: shipper" pattern
+      let typeLabel = '';
+      let notes = item.additionalinfo || '';
+      if (typeof notes === 'string') {
+        const m = notes.match(/^Type:\s*(shipper|traveller)\b[:\-\s]*/i);
+        if (m){ typeLabel = m[1].toLowerCase(); notes = notes.replace(/^Type:\s*(shipper|traveller)[:\-\s]*/i,''); }
       }
+      const from = item.from_loc || item.from || '';
+      const to = item.to_loc || item.to || '';
+      const name = item.name || '—';
+      const mobile = item.mobile || '';
+      const price = (item.price_per_kg !== undefined && item.price_per_kg !== null && item.price_per_kg !== '') ? `${item.price_per_kg} €/kg` : 'VB';
+      const cleanMobile = cleanPhoneForWa(mobile);
+      ticket.innerHTML = `
+        <div class="ticket-left" role="button" tabindex="0" aria-label="Open details for ${name}">
+          <div style="min-width:0">
+            <div class="route">${from} → ${to} ${typeLabel ? `<small style="font-weight:600;color:var(--muted);font-size:13px"> • ${typeLabel}</small>` : ''}</div>
+            <div class="meta">${name} • <span class="small-muted">${mobile || ''}</span></div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <button class="whatsapp-btn" data-wa="${cleanMobile}" title="Contact on WhatsApp">
+              <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="#fff" d="M20.5 3.5A11.9 11.9 0 0 0 12 1.1 11.9 11.9 0 0 0 3.5 3.5 11.9 11.9 0 0 0 1.1 12c0 2.2.6 4.3 1.8 6.2L1 23l4.1-1.3A11.9 11.9 0 0 0 12 22.9h.1c2.2 0 4.3-.6 6.2-1.8A11.9 11.9 0 0 0 22.9 12 11.9 11.9 0 0 0 20.5 3.5zM12 20c-1.8 0-3.5-.5-5-1.5l-.4-.2-2.4.8.8-2.3-.2-.3A8 8 0 1 1 20 12 8 8 0 0 1 12 20z"/><path fill="#fff" d="M17.2 14.2c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.3.3-1 1-.9 1.2.1.3 1.4 2.2 3 3.1 1.7.9 2 .7 2.3.6.3-.1.9-.4 1-1 .1-.5.3-1 .2-1.1-.1-.1-.3-.2-.6-.3z"/></svg>
+              <span style="font-size:13px">WhatsApp</span>
+            </button>
+          </div>
+        </div>
+        <div class="price">${price}</div>
+      `;
+      // clicking the left opens details modal
+      ticket.querySelector('.ticket-left').addEventListener('click', ()=>openDetail(item));
+      ticket.querySelector('.ticket-left').addEventListener('keydown', (e)=>{ if (e.key==='Enter') openDetail(item); });
+      // whatsapp button
+      ticket.querySelector('.whatsapp-btn').addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        const wa = ev.currentTarget.dataset.wa || '';
+        if (!wa) { showToast('No phone number'); return; }
+        window.open('https://wa.me/' + wa, '_blank');
+      });
+      document.getElementById('resultsRoot').appendChild(ticket);
     });
   });
 }
 
-/* Load data from backend and render */
-let cachedList = [];
-async function loadAndRender(){
-  const resp = await apiFetch('?action=list');
-  if (!resp.ok) { showToast('Network error loading list', {auto:3000}); return; }
-  cachedList = Array.isArray(resp.data) ? resp.data : [];
-  renderRequests(cachedList);
-}
+/* extended detail modal */
+function openDetail(item){
+  const root = document.getElementById('modalRoot');
+  root.style.display = 'block';
+  const price = (item.price_per_kg !== undefined && item.price_per_kg !== null && item.price_per_kg !== '') ? `${item.price_per_kg} €/kg` : 'VB';
+  const created = item.createdat ? new Date(item.createdat).toLocaleString() : '';
+  root.innerHTML = `
+    <div class="modal-backdrop" role="dialog" aria-modal="true">
+      <div class="modal">
+        <h3 style="margin-top:0">${item.from_loc || item.from || ''} → ${item.to_loc || item.to || ''}</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1">
+            <p><strong>${item.name || '—'}</strong></p>
+            <p class="small-muted">Type: ${ (item.additionalinfo||'').match(/^Type:\\s*(shipper|traveller)/i) ? ( (item.additionalinfo||'').match(/^Type:\\s*(shipper|traveller)/i)[1] ) : '—' }</p>
+            <p class="small-muted">Date: ${item.datepickup || '—'}</p>
+            <p class="small-muted">Phone: ${item.mobile || '—'}</p>
+            <p class="small-muted">Email: ${item.email || '—'}</p>
+            <p style="margin-top:8px">${ (item.additionalinfo||'').replace(/^Type:\\s*(shipper|traveller)[:\\-\\s]*/i,'') || '' }</p>
+          </div>
+          <div style="width:160px;text-align:right">
+            <div style="font-size:14px;color:var(--muted)">Price</div>
+            <div style="font-weight:800;font-size:18px">${price}</div>
+            <div style="margin-top:14px;color:var(--muted);font-size:12px">${created}</div>
+          </div>
+        </div>
 
-/* Client-side filtering */
-function filterList() {
-  const type = document.getElementById('searchType').value.trim().toLowerCase();
-  const from = document.getElementById('searchFrom').value.trim().toLowerCase();
-  const to = document.getElementById('searchTo').value.trim().toLowerCase();
-  const date = document.getElementById('searchDate').value;
-
-  const filtered = cachedList.filter(r=>{
-    // type: check additionalinfo
-    if (type) {
-      const ai = (r.additionalinfo||'').toLowerCase();
-      if (!ai.includes('type:') || !ai.includes(type)) return false;
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px">
+          <button id="closeDetailBtn" class="btn ghost">Close</button>
+          <button id="closeRequestBtn" class="btn" style="background:#ef4444">Close Request</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('closeDetailBtn').addEventListener('click', closeModalRoot);
+  document.getElementById('closeRequestBtn').addEventListener('click', async ()=>{
+    const confirmId = prompt('To confirm closing, enter the request ID:');
+    if (!confirmId || confirmId !== item.id) { alert('Cancelled or ID mismatch'); return; }
+    showToast('Closing request...');
+    const res = await api.close(item.id);
+    if (res && res.status === 'ok') {
+      showToast('Request closed', {auto:1800});
+      closeModalRoot();
+      await doSearch(); // refresh
+    } else {
+      showToast('Failed closing: ' + (res?.message || 'error'), {auto:3000});
     }
-    if (from) {
-      const f = (r.from_loc || r.from || '').toLowerCase();
-      if (!f.includes(from)) return false;
-    }
-    if (to) {
-      const t = (r.to_loc || r.to || '').toLowerCase();
-      if (!t.includes(to)) return false;
-    }
-    if (date) {
-      if (!r.datepickup) return false;
-      // compare only date part (iso-ish)
-      const d1 = (new Date(r.datepickup)).toISOString().slice(0,10);
-      if (d1 !== date) return false;
-    }
-    return true;
   });
-  renderRequests(filtered);
 }
+function closeModalRoot(){ const root = document.getElementById('modalRoot'); root.style.display='none'; root.innerHTML=''; }
 
-/* Toast helper */
-let toastTimer = null;
-function showToast(text, {success=false,auto=2500}={}) {
-  const root = document.getElementById('toastRoot');
-  root.innerHTML = `<div class="toast" style="background:${ success ? 'var(--success)' : '#0ea5ff' }">${text}</div>`;
-  if (toastTimer) clearTimeout(toastTimer);
-  if (auto>0) toastTimer = setTimeout(()=>root.innerHTML='', auto);
-}
-
-/* Modal: build and show */
+/* Add request modal */
 function openAddModal(){
   const root = document.getElementById('modalRoot');
   root.style.display = 'block';
   root.innerHTML = `
-  <div class="modal-backdrop" role="dialog" aria-modal="true">
-    <div class="modal" role="document">
-      <h3 style="margin:0 0 8px">Submit a Request</h3>
-      <form id="addForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="rname">Your name</label>
-            <input id="rname" name="name" type="text" required />
+    <div class="modal-backdrop" role="dialog" aria-modal="true">
+      <div class="modal">
+        <h3 style="margin-top:0">Submit a Request</h3>
+        <form id="addForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="rname">Your name</label>
+              <input id="rname" name="name" type="text" required />
+            </div>
+            <div class="form-group">
+              <label for="rtype">Request type</label>
+              <select id="rtype" name="type" required>
+                <option value="shipper">Shipper (I want to send)</option>
+                <option value="traveller">Traveller (I will carry)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="rfrom">From</label>
+              <input id="rfrom" name="from" type="text" required />
+            </div>
+            <div class="form-group">
+              <label for="rto">To</label>
+              <input id="rto" name="to" type="text" required />
+            </div>
+            <div class="form-group">
+              <label for="rdate">Pickup date</label>
+              <input id="rdate" name="datepickup" type="date" required />
+            </div>
+            <div class="form-group">
+              <label for="rprice">Price per kg (€) — optional</label>
+              <input id="rprice" name="price_per_kg" type="number" step="0.01" min="0" placeholder="e.g. 4.50" />
+            </div>
+            <div class="form-group">
+              <label for="rmobile">Mobile</label>
+              <input id="rmobile" name="mobile" type="tel" />
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label for="remail">Email (optional)</label>
+              <input id="remail" name="email" type="email" />
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label for="rnotes">Additional info</label>
+              <textarea id="rnotes" name="additionalinfo" placeholder="Any notes (fragile, size, pickup location, ... )"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="rtype">Request type</label>
-            <select id="rtype" name="type" required>
-              <option value="shipper">Shipper (I want to send)</option>
-              <option value="traveller">Traveller (I will carry)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="rfrom">From</label>
-            <input id="rfrom" name="from" type="text" required />
-          </div>
-          <div class="form-group">
-            <label for="rto">To</label>
-            <input id="rto" name="to" type="text" required />
-          </div>
-          <div class="form-group">
-            <label for="rdate">Pickup date</label>
-            <input id="rdate" name="datepickup" type="date" required />
-          </div>
-          <div class="form-group">
-            <label for="rmobile">Mobile</label>
-            <input id="rmobile" name="mobile" type="tel" />
-          </div>
-          <div class="form-group" style="grid-column:1/-1">
-            <label for="remail">Email</label>
-            <input id="remail" name="email" type="email" />
-          </div>
-          <div class="form-group" style="grid-column:1/-1">
-            <label for="rnotes">Additional info</label>
-            <textarea id="rnotes" name="additionalinfo"></textarea>
-          </div>
-        </div>
 
-        <div class="modal-actions">
-          <button type="button" id="cancelAdd" class="btn ghost">Cancel</button>
-          <button type="submit" class="btn">Submit Request</button>
-        </div>
-      </form>
+          <div class="modal-actions">
+            <button type="button" id="cancelAdd" class="btn ghost">Cancel</button>
+            <button type="submit" class="btn">Submit Request</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
   `;
-  // attach events
-  document.getElementById('cancelAdd').addEventListener('click', closeModal);
+  document.getElementById('cancelAdd').addEventListener('click', ()=>{ closeModalRoot(); });
   document.getElementById('addForm').addEventListener('submit', handleAddSubmit);
 }
 
-function closeModal(){
-  const root = document.getElementById('modalRoot');
-  root.style.display = 'none';
-  root.innerHTML = '';
+/* submit add */
+async function handleAddSubmit(e){
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const obj = Object.fromEntries(f.entries());
+  // keep price field if provided
+  if (!obj.price_per_kg || obj.price_per_kg === '') obj.price_per_kg = null;
+  // prepend type into additional info so we can persist type without DB change
+  obj.additionalinfo = `Type: ${obj.type}\n` + (obj.additionalinfo || '');
+  showToast('Submitting...');
+  const res = await api.add(obj);
+  if (res && res.status === 'ok') {
+    // show success modal with id
+    showSuccessModal(res.id);
+    closeModalRoot();
+    await doSearch();
+  } else {
+    showToast('Submit failed: ' + (res?.message || 'network'), {auto:3500});
+  }
 }
 
-/* handle add submit */
-async function handleAddSubmit(e) {
-  e.preventDefault();
-  const form = e.target;
-  const fm = new FormData(form);
-  const obj = Object.fromEntries(fm.entries());
-  // prepend type into additionalinfo to persist without schema change
-  const type = obj.type || '';
-  const notes = obj.additionalinfo || '';
-  obj.additionalinfo = `Type: ${type}\n${notes}`;
-
-  showToast('Submitting...', {auto:1500});
-  const res = await apiFetch('?action=add', {
-    method:'POST',
-    headers:{ 'Content-Type':'application/json' },
-    body: JSON.stringify(obj)
-  });
-
-  if (res.ok && res.data && res.data.status === 'ok') {
-    showToast('Request posted — ID: ' + res.data.id, {success:true, auto:3500});
-    closeModal();
-    await loadAndRender();
-  } else {
-    showToast('Submit failed: ' + (res.data?.message || 'network'), {auto:4000});
+/* search */
+async function doSearch(){
+  const type = document.getElementById('searchType').value;
+  const from = document.getElementById('searchFrom').value;
+  const to = document.getElementById('searchTo').value;
+  const date = document.getElementById('searchDate').value;
+  showToast('Searching...', {auto:900});
+  const data = await api.list({ type, from, to, date });
+  if (!Array.isArray(data)) {
+    showToast('Error loading results', {auto:3000});
+    document.getElementById('resultsRoot').innerHTML = '<div class="small-muted">Failed to load results.</div>';
+    return;
   }
+  // Map results: ensure returned keys match expected (price_per_kg, from_loc/to_loc etc.)
+  // Render grouped
+  renderGrouped(data);
 }
 
 /* initial wiring */
 document.getElementById('openAdd').addEventListener('click', openAddModal);
-document.getElementById('doSearch').addEventListener('click', (e)=>{
-  e.preventDefault();
-  filterList();
-});
-document.getElementById('searchType').addEventListener('change', filterList);
-document.getElementById('searchFrom').addEventListener('input', filterList);
-document.getElementById('searchTo').addEventListener('input', filterList);
-document.getElementById('searchDate').addEventListener('change', filterList);
+document.getElementById('doSearch').addEventListener('click', (e)=>{ e.preventDefault(); doSearch(); });
 
 /* initial load */
-loadAndRender();
+doSearch();
 </script>
 
 </body>
