@@ -2,94 +2,363 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>LuggageShare — Add Request</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WeightShare — Transport by Travellers</title>
+
+<!-- Simple modern styling (self-contained) -->
 <style>
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto; max-width: 800px; margin: 24px auto; padding: 0 16px; color: #111; }
-  label { display: block; margin: 10px 0 4px; font-weight: 600; }
-  input, select, textarea { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; }
-  button { margin-top: 12px; padding: 10px 14px; border-radius: 8px; border: none; background: #111; color: #fff; cursor: pointer; }
-  .note { font-size: 0.9rem; color: #555; margin-top: 8px; }
+  :root{
+    --blue:#0ea5ff;
+    --navy:#0f172a;
+    --muted:#6b7280;
+    --success:#16a34a;
+    --bg:#f8fafc;
+  }
+  html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#0b1220;background:var(--bg);}
+  .container{max-width:1100px;margin:0 auto;padding:20px;}
+  /* NAV */
+  header{background:#fff;box-shadow:0 6px 18px rgba(12,13,19,0.06);position:sticky;top:0;z-index:60;}
+  .nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;}
+  .logo{font-weight:700;color:var(--blue);font-size:20px;}
+  .nav-actions{display:flex;gap:14px;align-items:center}
+  .btn{background:var(--navy);color:#fff;padding:8px 14px;border-radius:10px;border:none;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--navy);border:1px solid #e6eef8}
+  .hero{
+    height:280px;
+    border-radius:10px;
+    margin-top:20px;
+    background-image: linear-gradient(90deg, rgba(6,11,26,0.65), rgba(6,11,26,0.25)), url('https://images.unsplash.com/photo-1501700493788-fa1a4fc9fe62?auto=format&fit=crop&w=1500&q=60');
+    background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+  .hero-inner{width:100%;max-width:980px;padding:28px}
+  .hero-title{font-size:28px;margin:0 0 12px;font-weight:700}
+  .search-bar{
+    background:rgba(255,255,255,0.95);
+    border-radius:12px;
+    padding:14px;
+    display:flex;gap:10px;align-items:center;box-shadow:0 6px 18px rgba(2,6,23,0.12);
+  }
+  .search-field{flex:1;display:flex;gap:8px;align-items:center}
+  .select, .input, .date {
+    background:#fff;border:1px solid #e6eef8;padding:10px 12px;border-radius:8px;min-width:140px;font-size:14px;color:#0b1220;
+  }
+  .input{flex:1}
+  .search-btn{background:var(--blue);color:#fff;border:none;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:600}
+  /* main */
+  main{margin-top:22px}
+  .section-title{font-size:18px;margin:8px 0 14px;color:var(--navy);font-weight:600}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+  .card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 4px 12px rgba(2,6,23,0.06)}
+  .card h4{margin:0 0 6px;font-size:16px}
+  .meta{color:var(--muted);font-size:13px;margin-bottom:8px}
+  .card .actions{display:flex;justify-content:space-between;align-items:center}
+  .close-btn{background:#fee2e2;color:#ef4444;padding:6px 8px;border-radius:8px;border:none;cursor:pointer}
+  /* modal */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.45);display:flex;align-items:center;justify-content:center;z-index:120}
+  .modal{width:100%;max-width:720px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 10px 40px rgba(2,6,23,0.3)}
+  .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .form-group{display:flex;flex-direction:column;gap:6px}
+  label{font-size:13px;color:#111;font-weight:600}
+  input[type="text"], input[type="date"], input[type="tel"], input[type="email"], select, textarea{
+    padding:10px;border-radius:8px;border:1px solid #e6eef8;font-size:14px;background:#fff;outline:none;
+  }
+  textarea{resize:vertical;min-height:80px}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+  /* toast */
+  .toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:12px 18px;border-radius:10px;z-index:200;box-shadow:0 8px 24px rgba(2,6,23,0.18)}
+  /* responsive */
+  @media (max-width:720px){
+    .form-grid{grid-template-columns:1fr}
+    .search-bar{flex-direction:column;align-items:stretch}
+    .search-field{flex-direction:column}
+  }
 </style>
 </head>
 <body>
 
-<h1>LuggageShare — Add Request</h1>
+<header>
+  <div class="container nav-wrap">
+    <div class="logo">WeightShare</div>
+    <div class="nav-actions">
+      <button id="openAdd" class="btn">➕ Add Request</button>
+      <a class="btn ghost" href="#" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});return false">Transport</a>
+    </div>
+  </div>
+</header>
 
-<form id="requestForm">
-  <label for="name">Name</label>
-  <input id="name" name="name" required />
+<section class="hero">
+  <div class="hero-inner container">
+    <div class="hero-title">Send or transport parcels with travellers — faster and cheaper</div>
 
-  <label for="from">From</label>
-  <select id="from" name="from" required>
-    <option value="">-- select city/airport --</option>
-    <option>Hamburg (HAM)</option>
-    <option>Berlin (BER)</option>
-    <option>Cairo (CAI)</option>
-    <option>Alexandria (HBE)</option>
-    <option>Munich (MUC)</option>
-  </select>
+    <div class="search-bar" role="search" aria-label="Search transport requests">
+      <!-- Request type select -->
+      <div class="search-field" style="min-width:220px;max-width:260px;">
+        <select id="searchType" class="select" aria-label="Request type">
+          <option value="">Any type</option>
+          <option value="shipper">Shipper (looking to send)</option>
+          <option value="traveller">Traveller (offering transport)</option>
+        </select>
+      </div>
 
-  <label for="to">To</label>
-  <select id="to" name="to" required>
-    <option value="">-- select city/airport --</option>
-    <option>Cairo (CAI)</option>
-    <option>Hamburg (HAM)</option>
-    <option>Berlin (BER)</option>
-    <option>Alexandria (HBE)</option>
-    <option>Munich (MUC)</option>
-  </select>
+      <div class="search-field">
+        <input id="searchFrom" class="input" type="text" placeholder="Leaving from (city or airport)" aria-label="From" />
+        <input id="searchTo" class="input" type="text" placeholder="Going to (city or airport)" aria-label="To" />
+        <input id="searchDate" class="date" type="date" aria-label="Date" />
+      </div>
 
-  <label for="datepickup">Pickup date</label>
-  <input id="datepickup" name="datepickup" type="date" required />
+      <div>
+        <button id="doSearch" class="search-btn">Search</button>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <label for="mobile">Mobile (optional)</label>
-  <input id="mobile" name="mobile" placeholder="+49..." />
+<main class="container">
+  <h3 class="section-title">Open Requests</h3>
+  <div id="listArea" class="cards" aria-live="polite">
+    <!-- cards will render here -->
+  </div>
+</main>
 
-  <label for="email">E-mail (optional)</label>
-  <input id="email" name="email" type="email" />
+<!-- Modal (hidden) -->
+<div id="modalRoot" style="display:none"></div>
 
-  <label for="additionalinfo">Additional info (optional)</label>
-  <textarea id="additionalinfo" name="additionalinfo" rows="4"></textarea>
-
-  <button type="submit">Post request</button>
-  <p class="note">After posting, you'll get an ID. Save it so you can close the request later.</p>
-</form>
+<!-- Toast container -->
+<div id="toastRoot" style="position:fixed;top:0;left:0;right:0;pointer-events:none"></div>
 
 <script>
-const WEBAPP_URL = 'https://weightshare-backend.weightshare.workers.dev';
+/* CONFIG: set your worker URL here */
+const WORKER_URL = 'https://weightshare-backend.weightshare.workers.dev'; // <- already set
 
-document.getElementById('requestForm').addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-
-  const data = {
-    name: document.getElementById('name').value,
-    from: document.getElementById('from').value,
-    to: document.getElementById('to').value,
-    datepickup: document.getElementById('datepickup').value,
-    mobile: document.getElementById('mobile').value,
-    email: document.getElementById('email').value,
-    additionalinfo: document.getElementById('additionalinfo').value
-  };
-
+/* Helper: fetch JSON with basic error handling */
+async function apiFetch(path, options = {}) {
   try {
-    const resp = await fetch(WEBAPP_URL + '?action=add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    const res = await resp.json();
-    if (res.status === 'ok') {
-      alert('Request posted! Your request ID: ' + res.id);
-      document.getElementById('requestForm').reset();
-    } else {
-      alert('Error: ' + (res.message || JSON.stringify(res)));
-    }
+    const res = await fetch(WORKER_URL + path, options);
+    const j = await res.json().catch(() => ({ status:'error', message:'Invalid JSON' }));
+    return { ok: res.ok, status: res.status, data: j };
   } catch (err) {
-    alert('Network error: ' + err);
+    return { ok:false, status:0, data:{ status:'error', message: String(err) } };
   }
+}
+
+/* Render request cards */
+function renderRequests(list) {
+  const container = document.getElementById('listArea');
+  container.innerHTML = '';
+  if (!Array.isArray(list) || list.length === 0) {
+    container.innerHTML = '<div style="grid-column:1/-1;color:var(--muted)">No open requests found.</div>';
+    return;
+  }
+  list.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    // Extract type from additionalinfo if present
+    let typ = '';
+    let notes = r.additionalinfo || '';
+    if (typeof notes === 'string') {
+      const m = notes.match(/^Type:\\s*(shipper|traveller)\\b[:\\-\\s]*/i);
+      if (m) {
+        typ = m[1].toLowerCase();
+        notes = notes.replace(/^Type:\\s*(shipper|traveller)[:\\-\\s]*/i, '');
+      }
+    }
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <h4>${r.name || '—'} ${typ ? '<small style="font-weight:600;color:var(--muted);font-size:13px"> • ' + typ + '</small>' : ''}</h4>
+          <div class="meta">${r.from_loc || r.from || '—'} → ${r.to_loc || r.to || '—'} • ${r.datepickup || ''}</div>
+          <div style="color:var(--muted);font-size:13px;margin-bottom:8px">${notes || ''}</div>
+          <div style="font-size:13px;color:var(--muted)"><strong>Contact:</strong> ${r.mobile || ''} ${r.email ? ' • ' + r.email : ''}</div>
+        </div>
+        <div class="actions">
+          <div style="text-align:right">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${r.createdat ? (new Date(r.createdat)).toLocaleString() : ''}</div>
+            <button class="close-btn" data-id="${r.id}">Close</button>
+          </div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+
+  // attach close listeners
+  container.querySelectorAll('.close-btn').forEach(btn=>{
+    btn.addEventListener('click', async (e)=>{
+      const id = e.target.dataset.id;
+      const secret = prompt('Enter the request ID to confirm closing (copy/paste):');
+      if (!secret || secret !== id) { alert('Cancelled or ID mismatch'); return; }
+      showToast('Closing request...', {auto:1500});
+      const res = await apiFetch('?action=close', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body: JSON.stringify({ id })
+      });
+      if (res.ok && res.data && res.data.status === 'ok') {
+        showToast('Request closed', {success:true, auto:1800});
+        await loadAndRender(); // refresh
+      } else {
+        showToast('Error closing request: ' + (res.data?.message || 'unknown'), {auto:3000});
+      }
+    });
+  });
+}
+
+/* Load data from backend and render */
+let cachedList = [];
+async function loadAndRender(){
+  const resp = await apiFetch('?action=list');
+  if (!resp.ok) { showToast('Network error loading list', {auto:3000}); return; }
+  cachedList = Array.isArray(resp.data) ? resp.data : [];
+  renderRequests(cachedList);
+}
+
+/* Client-side filtering */
+function filterList() {
+  const type = document.getElementById('searchType').value.trim().toLowerCase();
+  const from = document.getElementById('searchFrom').value.trim().toLowerCase();
+  const to = document.getElementById('searchTo').value.trim().toLowerCase();
+  const date = document.getElementById('searchDate').value;
+
+  const filtered = cachedList.filter(r=>{
+    // type: check additionalinfo
+    if (type) {
+      const ai = (r.additionalinfo||'').toLowerCase();
+      if (!ai.includes('type:') || !ai.includes(type)) return false;
+    }
+    if (from) {
+      const f = (r.from_loc || r.from || '').toLowerCase();
+      if (!f.includes(from)) return false;
+    }
+    if (to) {
+      const t = (r.to_loc || r.to || '').toLowerCase();
+      if (!t.includes(to)) return false;
+    }
+    if (date) {
+      if (!r.datepickup) return false;
+      // compare only date part (iso-ish)
+      const d1 = (new Date(r.datepickup)).toISOString().slice(0,10);
+      if (d1 !== date) return false;
+    }
+    return true;
+  });
+  renderRequests(filtered);
+}
+
+/* Toast helper */
+let toastTimer = null;
+function showToast(text, {success=false,auto=2500}={}) {
+  const root = document.getElementById('toastRoot');
+  root.innerHTML = `<div class="toast" style="background:${ success ? 'var(--success)' : '#0ea5ff' }">${text}</div>`;
+  if (toastTimer) clearTimeout(toastTimer);
+  if (auto>0) toastTimer = setTimeout(()=>root.innerHTML='', auto);
+}
+
+/* Modal: build and show */
+function openAddModal(){
+  const root = document.getElementById('modalRoot');
+  root.style.display = 'block';
+  root.innerHTML = `
+  <div class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <h3 style="margin:0 0 8px">Submit a Request</h3>
+      <form id="addForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="rname">Your name</label>
+            <input id="rname" name="name" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="rtype">Request type</label>
+            <select id="rtype" name="type" required>
+              <option value="shipper">Shipper (I want to send)</option>
+              <option value="traveller">Traveller (I will carry)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rfrom">From</label>
+            <input id="rfrom" name="from" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="rto">To</label>
+            <input id="rto" name="to" type="text" required />
+          </div>
+          <div class="form-group">
+            <label for="rdate">Pickup date</label>
+            <input id="rdate" name="datepickup" type="date" required />
+          </div>
+          <div class="form-group">
+            <label for="rmobile">Mobile</label>
+            <input id="rmobile" name="mobile" type="tel" />
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label for="remail">Email</label>
+            <input id="remail" name="email" type="email" />
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label for="rnotes">Additional info</label>
+            <textarea id="rnotes" name="additionalinfo"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelAdd" class="btn ghost">Cancel</button>
+          <button type="submit" class="btn">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  `;
+  // attach events
+  document.getElementById('cancelAdd').addEventListener('click', closeModal);
+  document.getElementById('addForm').addEventListener('submit', handleAddSubmit);
+}
+
+function closeModal(){
+  const root = document.getElementById('modalRoot');
+  root.style.display = 'none';
+  root.innerHTML = '';
+}
+
+/* handle add submit */
+async function handleAddSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const fm = new FormData(form);
+  const obj = Object.fromEntries(fm.entries());
+  // prepend type into additionalinfo to persist without schema change
+  const type = obj.type || '';
+  const notes = obj.additionalinfo || '';
+  obj.additionalinfo = `Type: ${type}\n${notes}`;
+
+  showToast('Submitting...', {auto:1500});
+  const res = await apiFetch('?action=add', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify(obj)
+  });
+
+  if (res.ok && res.data && res.data.status === 'ok') {
+    showToast('Request posted — ID: ' + res.data.id, {success:true, auto:3500});
+    closeModal();
+    await loadAndRender();
+  } else {
+    showToast('Submit failed: ' + (res.data?.message || 'network'), {auto:4000});
+  }
+}
+
+/* initial wiring */
+document.getElementById('openAdd').addEventListener('click', openAddModal);
+document.getElementById('doSearch').addEventListener('click', (e)=>{
+  e.preventDefault();
+  filterList();
 });
+document.getElementById('searchType').addEventListener('change', filterList);
+document.getElementById('searchFrom').addEventListener('input', filterList);
+document.getElementById('searchTo').addEventListener('input', filterList);
+document.getElementById('searchDate').addEventListener('change', filterList);
+
+/* initial load */
+loadAndRender();
 </script>
 
 </body>
