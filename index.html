@@ -5,7 +5,7 @@
   <title>Add Request</title>
   <style>
     body { font-family: Arial; margin: 40px; }
-    input, textarea { width: 100%; padding: 8px; margin: 6px 0; }
+    input, textarea, select { width: 100%; padding: 8px; margin: 6px 0; }
     button { padding: 10px 20px; cursor: pointer; }
   </style>
 </head>
@@ -52,7 +52,7 @@ document.getElementById('requestForm').addEventListener('submit', async (e) => {
     additionalinfo: document.getElementById('additionalinfo').value
   };
 
-  const url = "https://weightshare-backend.weightshare.workers.dev/add";
+  const url = "PASTE_YOUR_REAL_CLOUDFLARE_WORKER_URL_HERE/submit";
 
   try {
     const res = await fetch(url, {
@@ -63,7 +63,7 @@ document.getElementById('requestForm').addEventListener('submit', async (e) => {
 
     const result = await res.json();
 
-    if (result.status === "ok") {
+    if (result.success) {
       alert('Request added! Your request ID: ' + result.id);
       document.getElementById('requestForm').reset();
     } else {
