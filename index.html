@@ -453,7 +453,7 @@ async function doSearch(){
   const to = document.getElementById('searchTo').value;
   const date = document.getElementById('searchDate').value;
   showToast('Searching...', {auto:900});
-  const data = await api.list({ type, from, to, date });
+  const data = await api.list({ type, from, to, datepickup: date });
   if (!Array.isArray(data)) {
     showToast('Error loading results', {auto:3000});
     document.getElementById('resultsRoot').innerHTML = '<div class="small-muted">Failed to load results.</div>';
