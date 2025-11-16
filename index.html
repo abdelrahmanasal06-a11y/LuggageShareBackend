@@ -127,7 +127,7 @@ const api = {
     const params = new URLSearchParams();
     if (q.from) params.set('from', q.from);
     if (q.to) params.set('to', q.to);
-    if (q.date) params.set('date', q.date);
+    if (q.datepickup) params.set('datepickup', q.datepickup);
     if (q.type) params.set('type', q.type);
     const url = WORKER_URL + LIST_ROUTE + (params.toString() ? ('?' + params.toString()) : '');
     try {
