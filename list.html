@@ -1,92 +1,89 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>LuggageShare — Open Requests</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <title>Open Requests</title>
   <style>
-    body{font-family:system-ui,Segoe UI,Roboto;max-width:1000px;margin:24px auto;padding:0 16px}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-    th{background:#f8f8f8}
-    .closeBtn{padding:6px 8px;border-radius:6px;border:none;cursor:pointer}
+    body { font-family: Arial; margin: 40px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background: #f4f4f4; }
+    button { padding: 6px 12px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h1>Open Requests</h1>
-  <div>
-    <button id="refresh">Refresh</button>
-    <p>To close a request, the requester must use their request ID (shown on submission).</p>
-  </div>
-  <table id="listTable">
-    <thead><tr><th>ID</th><th>Name</th><th>From</th><th>To</th><th>Date</th><th>Mobile</th><th>Email</th><th>Info</th><th>Action</th></tr></thead>
-    <tbody></tbody>
-  </table>
 
-  <script>
-    const WEBAPP_URL = 'https://weightshare-backend.weightshare.workers.dev'; //same web app url
+<h2>Open Requests</h2>
 
-    async function loadList(){
-      const t = document.querySelector('#listTable tbody');
-      t.innerHTML = '<tr><td colspan="9">Loading...</td></tr>';
-      try {
-        const resp = await fetch(WEBAPP_URL + '?action=list');
-        const arr = await resp.json();
-        if (!Array.isArray(arr)) {
-          t.innerHTML = '<tr><td colspan="9">Error loading list</td></tr>';
-          return;
-        }
-        if (arr.length === 0) {
-          t.innerHTML = '<tr><td colspan="9">No open requests</td></tr>';
-          return;
-        }
-        t.innerHTML = '';
-        arr.forEach(r => {
-          const row = document.createElement('tr');
-          row.innerHTML = `<td>${r.id||''}</td>
-          <td>${r.name||''}</td>
-          <td>${r.from_loc||''}</td>
-          <td>${r.to_loc||''}</td>
-          <td>${r.datepickup||''}</td>
-          <td>${r.mobile||''}</td>
-          <td>${r.email||''}</td>
-          <td>${(r.additionalinfo||'').slice(0,80)}</td>
-          <td><button class="closeBtn" data-id="${r.id}">Close</button></td>`;
-          t.appendChild(row);
-        });
-        document.querySelectorAll('.closeBtn').forEach(b => {
-          b.addEventListener('click', async (ev) => {
-            const id = ev.target.dataset.id;
-            const secret = prompt('Enter the request ID to confirm closing (copy/paste).');
-            if (!secret || secret !== id) {
-              alert('ID mismatch or cancelled. Only the requester who has the ID can close the request.');
-              return;
-            }
-            try {
-              const res = await fetch(WEBAPP_URL + '?action=close', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({id: id})
-              });
-              const j = await res.json();
-              if (j.status === 'ok') {
-                alert('Request closed.');
-                loadList();
-              } else {
-                alert('Error: ' + (j.message || JSON.stringify(j)));
-              }
-            } catch (err) {
-              alert('Network error: ' + err);
-            }
-          });
-        });
-      } catch (err) {
-        t.innerHTML = '<tr><td colspan="9">Network error</td></tr>';
-      }
-    }
+<button onclick="loadRequests()">Refresh</button>
 
-    document.getElementById('refresh').addEventListener('click', loadList);
-    loadList();
-  </script>
+<p>To close a request, the requester must use their request ID (shown on submission).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Date</th>
+      <th>Mobile</th>
+      <th>Email</th>
+      <th>Info</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="requestTable"></tbody>
+</table>
+
+<script>
+const BASE_URL = "https://weightshare-backend.weightshare.workers.dev";
+
+async function loadRequests() {
+  const res = await fetch(`${BASE_URL}/list`);
+  const json = await res.json();
+
+  const tbody = document.getElementById("requestTable");
+  tbody.innerHTML = "";
+
+  json.forEach(r => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${r.id || ""}</td>
+      <td>${r.name || ""}</td>
+      <td>${r.from_loc || ""}</td>
+      <td>${r.to_loc || ""}</td>
+      <td>${r.datepickup || ""}</td>
+      <td>${r.mobile || ""}</td>
+      <td>${r.email || ""}</td>
+      <td>${(r.additionalinfo || "").slice(0,80)}</td>
+      <td><button onclick="closeRequest('${r.id}')">Close</button></td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+async function closeRequest(id) {
+  const secret = prompt("Enter the request ID to confirm closing:");
+
+  if (!secret || secret !== id) {
+    alert("Incorrect ID — only the requester can close the request.");
+    return;
+  }
+
+  const res = await fetch(`${BASE_URL}/close?id=${id}`, { method: "POST" });
+  const json = await res.json();
+
+  if (json.success) {
+    alert("Request closed.");
+    loadRequests();
+  } else {
+    alert("Error closing request.");
+  }
+}
+
+loadRequests();
+</script>
+
 </body>
 </html>
