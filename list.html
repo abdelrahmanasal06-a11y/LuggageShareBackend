@@ -17,8 +17,6 @@
 
 <button onclick="loadRequests()">Refresh</button>
 
-<p>To close a request, the requester must use their request ID (shown on submission).</p>
-
 <table>
   <thead>
     <tr>
@@ -64,21 +62,26 @@ async function loadRequests() {
 }
 
 async function closeRequest(id) {
-  const secret = prompt("Enter the request ID to confirm closing:");
+  const confirmId = prompt("Enter the request ID to close:");
 
-  if (!secret || secret !== id) {
-    alert("Incorrect ID — only the requester can close the request.");
+  if (!confirmId || confirmId !== id) {
+    alert("Incorrect ID — cannot close request.");
     return;
   }
 
-  const res = await fetch(`${BASE_URL}/close?id=${id}`, { method: "POST" });
+  const res = await fetch(`${BASE_URL}/close`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id })
+  });
+
   const json = await res.json();
 
-  if (json.success) {
+  if (json.status === "ok") {
     alert("Request closed.");
     loadRequests();
   } else {
-    alert("Error closing request.");
+    alert("Error closing request: " + JSON.stringify(json));
   }
 }
 
