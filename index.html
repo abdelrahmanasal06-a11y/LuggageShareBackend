@@ -304,7 +304,7 @@ function openDetail(item){
         <div style="display:flex;gap:12px;flex-wrap:wrap">
           <div style="flex:1">
             <p><strong>${item.name || '—'}</strong></p>
-            <p class="small-muted">Type: ${ (item.type||'')</p>
+            <p class="small-muted">Type: ${ (item.type||'').match(/^Type:\\s*(shipper|traveller)/i) ? ( (item.additionalinfo||'').match(/^Type:\\s*(shipper|traveller)/i)[1] ) : '—' }</p>
             <p class="small-muted">Date: ${item.datepickup || '—'}</p>
             <p class="small-muted">Phone: ${item.mobile || '—'}</p>
             <p class="small-muted">Email: ${item.email || '—'}</p>
