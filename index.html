@@ -452,15 +452,22 @@ async function doSearch(){
   const from = document.getElementById('searchFrom').value;
   const to = document.getElementById('searchTo').value;
   const date = document.getElementById('searchDate').value;
+
   showToast('Searching...', {auto:900});
-  const data = await api.list({ type, from, to, datepickup: date });
+
+  const data = await api.list({
+    type,
+    from,
+    to,
+    datepickup: date    // <-- FIXED!
+  });
+
   if (!Array.isArray(data)) {
     showToast('Error loading results', {auto:3000});
     document.getElementById('resultsRoot').innerHTML = '<div class="small-muted">Failed to load results.</div>';
     return;
   }
-  // Map results: ensure returned keys match expected (price_per_kg, from_loc/to_loc etc.)
-  // Render grouped
+
   renderGrouped(data);
 }
 
