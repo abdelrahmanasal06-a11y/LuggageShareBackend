@@ -217,7 +217,9 @@ function cleanPhoneForWa(phone) {
 function groupByDate(items){
   const map = {};
   items.forEach(it=>{
-    const dp = it.datepickup ? (new Date(it.datepickup)).toISOString().slice(0,10) : 'no-date';
+    const dp = it.datepickup || it.datepickup_clean
+    ? new Date(it.datepickup || it.datepickup_clean).toISOString().slice(0,10)
+    : 'no-date';
     if (!map[dp]) map[dp]=[];
     map[dp].push(it);
   });
